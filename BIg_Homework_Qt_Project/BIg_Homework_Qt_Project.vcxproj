@@ -86,7 +86,7 @@
     <ClCompile Include="UiSetup.cpp" />
     <QtRcc Include="mainWIndow.qrc" />
     <QtUic Include="mainWIndow.ui" />
-    <ClInclude Include="MainWindow.h" />
+    <QtMoc Include="MainWindow.h" />
     <ClCompile Include="MainWindow.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
