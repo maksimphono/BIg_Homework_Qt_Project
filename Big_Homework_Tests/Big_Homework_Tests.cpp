@@ -2,6 +2,8 @@
 #include "CppUnitTest.h"
 #include "../BIg_Homework_Qt_Project/main.cpp"
 
+//#include "C:\Qt\6.6.0\msvc2019_64\include\QtWidgets\qapplication.h"
+
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
 namespace BigHomeworkTests
@@ -11,6 +13,7 @@ namespace BigHomeworkTests
 	public:
 		TEST_METHOD(TestMethod1)
 		{
+			//QApplication app;
 			Assert::AreEqual(0, 0);
 		}
 	};
