@@ -4,10 +4,9 @@
 int main(int argc, char* argv[])
 {   
     using Game_Object_NS::Game_Object;
-    Game_Object obj;
+    Game_Object obj("qw");
     Game_Object obj2;
-    Game_Object_NS::objects;
-    Game_Object::getElementById(obj2.id)->id = (char*)"9";
+    
 
     return 0;
 }
