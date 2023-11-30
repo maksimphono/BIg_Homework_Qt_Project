@@ -22,6 +22,8 @@ int main(int argc, char* argv[])
     using Tube_NS::TubeBlock;
     using Structure_NS::Orientation;
     Mine* mine = new Mine(3, "Coal", "qw");
+    Item* item = new Item("Coal", "", 1, true, 4);
+    std::pair<Item*, Item*> p = item->cut();
     
     TubeBlock* t1 = new TubeBlock(NULL, NULL, Orientation::LEFT, "1");
     TubeBlock* t2 = new TubeBlock(NULL, NULL, Orientation::LEFT, "2");

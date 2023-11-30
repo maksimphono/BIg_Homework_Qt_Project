@@ -15,9 +15,11 @@ namespace Item_NS {
 	using namespace Game_Object_NS;
 	using Structure_NS::Orientation;
 
+	typedef enum {FULL, LEFT, RIGHT} Cut_state;
+
 	namespace Exceptions {
 		using std::exception;
-		typedef enum { T_id_already_exist, T_bad_arguments, T_cant_create_more } Type;
+		typedef enum { T_id_already_exist, T_cant_cut, T_cant_create_more } Type;
 		class Exception : public exception {
 		private:
 			Type type;
@@ -31,6 +33,7 @@ namespace Item_NS {
 				return this->type == other.type;
 			}
 		};
+
 	}
 	
 	class Item : Game_Object{
@@ -39,21 +42,34 @@ namespace Item_NS {
 		bool cuttible;
 		int price;
 		string* resource;
+		Cut_state cut_state;
 	public:
 		Item(Item& other) {
 			this->speed = other.speed;
 			this->cuttible = other.cuttible;
 			this->price = other.price;
 			this->resource = other.resource;
+			this->cut_state = other.cut_state;
 		}
 		Item (string resource, string id = "", int speed = 0, bool cuttible = false, int price = 0)
-			: speed(speed), cuttible(cuttible), price(price), Game_Object(id.c_str()) {
+			: speed(speed), cuttible(cuttible), price(price), cut_state(FULL), Game_Object(id.c_str()) {
 			this->resource = new string(resource);
 			*this->resource = resource;
 			//Game_Object(id.c_str());
 		}
 		~Item() override {
 			delete this->resource;
+		}
+
+		std::pair<Item*, Item*> cut() {
+			if (!this->cuttible) return { NULL, NULL };
+			Item* left_part = new Item(*this->resource, "", this->speed, false, this->price / 2);
+			Item* right_part = new Item(*this->resource, "", this->speed, false, this->price / 2);
+			left_part->cut_state = LEFT;
+			right_part->cut_state = RIGHT;
+
+			delete this;
+			return { left_part , right_part };
 		}
 
 		void move(Orientation) {
