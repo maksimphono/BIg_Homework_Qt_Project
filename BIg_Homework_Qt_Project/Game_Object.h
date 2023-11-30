@@ -7,11 +7,12 @@
 using std::map;
 using std::vector;
 
-typedef enum {T1} EventType;
+typedef enum {NONE, T1} EventType;
 
 typedef unsigned long long ull;
 
 class Game_Event;
+
 
 namespace Game_Object_NS {
 	using std::string;
@@ -44,6 +45,8 @@ namespace Game_Object_NS {
 
 	map<string, Game_Object*> objects;
 
+	
+
 	class Game_Object {
 	private:
 		
@@ -59,71 +62,120 @@ namespace Game_Object_NS {
 
 	private:
 		
-		map<EventType, vector<EventHandler>> handlers;
+		map<EventType, vector<EventHandler>*>* handlers;
+		
 	public: // basic data:
-		string id;
-		string state;
+		string* id;
+		string* state;
 		
 		Game_Object(const char* id = "") {
 			if (id != "" && !checkId(id)) {
 				throw Exceptions::Exception_id_already_exist;
 			}
-			this->id = id;
-			Game_Object_NS::objects[this->id] = this;
-			this->state = STATE_AFTER_INITIALIZATION;
-			this->handlers = map<EventType, vector<EventHandler>>();
+			this->id = new string(id);
+			Game_Object_NS::objects[*this->id] = this;
+			this->state = new string(STATE_AFTER_INITIALIZATION);
+			this->handlers = new map<EventType, vector<EventHandler>*>();
 		}
 		virtual ~Game_Object() {
-			objects.erase(this->id);
+			objects.erase(*this->id);
+			this->unbindAll();
+			delete this->handlers;
+			delete this->id;
+			delete this->state;
 		}
 	public: // event methods:
 		int bind(const EventType type, EventHandler handler) {
-			this->handlers[type].push_back(handler);
+			if ((*this->handlers)[type] == NULL) (*this->handlers)[type] = new vector<EventHandler>();
+			((*this->handlers)[type])->push_back(handler);
 			return this->handlers[type].size() - 1;
 		}
 		void fireSeries(const EventType type, Game_Event* evnt) {
-			auto handlers = this->handlers[type];
-			for (const auto& handler : handlers) {
+			auto handlers = (*this->handlers)[type];
+			for (const auto& handler : *handlers) {
 				handler(evnt);
 			}
 		}
 		void fireSingle(const EventType type, int index, Game_Event* evnt) {
-			auto handlers = this->handlers[type];
-			if (index <= handlers.size()) {
-				handlers[index](evnt);
+			auto handlers = (*this->handlers)[type];
+			if (index <= handlers->size()) {
+				(*handlers)[index](evnt);
+			}
+		}
+		void fire(const EventType type, EventHandler handler, Game_Event* evnt) {
+			auto handlers = (*this->handlers)[type];
+			for (const auto& my_handler : *handlers) {
+				if (handler == my_handler) {
+					handler(evnt);
+				}
 			}
 		}
 		void unbind(const EventType type, int index) {
 			if (index <= this->handlers[type].size()) {
-				this->handlers[type].erase(this->handlers[type].begin() + index);
+				(*this->handlers)[type]->erase((*this->handlers)[type]->begin() + index);
 			}
+		}
+		void unbind(const EventType type, EventHandler handler) {
+			typedef std::vector<Game_Object_NS::EventHandler>::iterator Iterator;
+
+			auto& handlers = (*this->handlers)[type];
+			vector<Iterator> indices = {};
+			int deleted = 0;
+			for (auto my_handler = handlers->begin(); my_handler < handlers->end(); my_handler++) {
+				if (handler == *my_handler) {
+					handlers->erase(my_handler);
+					break;
+				}
+			}
+		}
+		void unbindAll() {
+			for (const auto& handlers : (*this->handlers)) {
+				for (int i = 0; i < handlers.second->size(); i++) {
+					this->unbind(handlers.first, i);
+					i--;
+				}
+			}
+			
 		}
 	public: // getters:
 		string getId() const{
-			return this->id;
+			return *this->id;
 		}
 		string getState() const {
-			return this->id;
+			return *this->id;
 		}
 	public: // setters:
 		void getId(const string newId){
 			if (Game_Object::checkId(newId)) {
-				this->id = newId;
+				*this->id = newId;
 			}
 			else {
 				throw Exceptions::Exception_id_already_exist;
 			}
 		}
 		void getState(string newStatus) {
-			this->state = newStatus;
+			*this->state = newStatus;
 		}
 	};
 
 	class Game_Event {
 	private:
 		EventType type;
-		Game_Object target;
 		ull tickstamp;
 	public:
+		Game_Object* target;
+		Game_Object* object;
+		void* payload;
+	public:
+		Game_Event() : type(NONE), target(NULL), object(NULL), payload(NULL), tickstamp(0) {}
+		Game_Event(const EventType type, Game_Object* target = NULL, Game_Object* object = NULL, void* payload = NULL, ull tickstamp = 0)
+			: type(type), target(target), object(object), payload(payload), tickstamp(tickstamp) {}
+		virtual ~Game_Event() {
+			this->type = NONE;
+			this->target = NULL;
+			this->object = NULL;
+			this->payload = NULL;
+			this->tickstamp = 0;
+		}
 	};
 }
