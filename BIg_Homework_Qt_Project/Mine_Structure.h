@@ -26,20 +26,17 @@ namespace Mine_NS {
 			delete this->item_sample;
 		}
 		
-		void emit() {
+		void emit() const {
 			if (this->isEnabled()) {
 				// TODO: realize items emitting system
 				return;
 			}
 		}
 
-		void tick(ull globalTick) override {
+		void tick(ull globalTick) const override {
 			if (globalTick % this->frequency == 0) {
-				__super::setState("emit");
+				//this->setState("emit");
 				this->emit();
-			}
-			else {
-				__super::setState("reloading");
 			}
 		}
 

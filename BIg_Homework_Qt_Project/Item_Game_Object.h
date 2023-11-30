@@ -6,12 +6,14 @@
 #include <map>
 */
 #include <string>
+#include "Structure_Game_Object.h"
 
 namespace Item_NS {
 	using std::vector;
 	using std::string;
 	using std::map;
 	using namespace Game_Object_NS;
+	using Structure_NS::Orientation;
 
 	namespace Exceptions {
 		using std::exception;
@@ -52,6 +54,11 @@ namespace Item_NS {
 		}
 		~Item() override {
 			delete this->resource;
+		}
+
+		void move(Orientation) {
+			// TODO : implement movement system
+			return;
 		}
 	public: // getters:
 		int getSpeed() const {

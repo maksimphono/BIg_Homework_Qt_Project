@@ -57,11 +57,11 @@ namespace Game_Object_NS {
 		}
 
 	private:
-		
+
+		string* id;
 		map<EventType, vector<EventHandler>*>* handlers;
 		
 	public: // basic data:
-		string* id;
 		string* state;
 		
 		Game_Object(const char* id = "") {
@@ -81,7 +81,7 @@ namespace Game_Object_NS {
 			delete this->state;
 		}
 
-		virtual void tick(ull globalTick);
+		virtual void tick(ull globalTick) const {}
 
 	public: // event methods:
 		int bind(const EventType type, EventHandler handler) {

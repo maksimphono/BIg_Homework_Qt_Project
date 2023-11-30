@@ -9,17 +9,22 @@ void handle1(Game_Object_NS::Game_Event* evnt) {
     *evnt->object->state = "zxcvb";
 }
 #include "Item_Game_Object.h"
+#include "Mine_Structure.h"
 
 int main(int argc, char* argv[])
 {   
     using Game_Object_NS::Game_Object;
     using Game_Object_NS::Game_Event;
     using Game_Object_NS::EventHandler;
-
+    using Mine_NS::Mine;
     using Item_NS::Item;
-    Item* item = new Item("Coal", "qw");
-    Game_Object* obj = (Game_Object*)item;
-    delete item;
+    Mine* mine = new Mine(3, "Coal", "qw");
+    
+    for (int i = 0; i < 9; i++) {
+        mine->tick(i);
+    }
+
+    delete mine;
 
     return 0;
 }

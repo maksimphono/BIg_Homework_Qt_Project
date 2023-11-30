@@ -28,8 +28,8 @@ namespace Structure_NS {
 		};
 	}
 
-	class Structure : Game_Object {
-	private:
+	class Structure : public Game_Object {
+	protected:
 		bool enabled;
 		Orientation orientation;
 	public:
@@ -48,9 +48,9 @@ namespace Structure_NS {
 		
 		~Structure() override {
 		}
-		void tick(ull) override;
+		void tick(ull) const override {};
 	public: // getters:
-		int getOrientation() const {
+		Orientation getOrientation() const {
 			return this->orientation;
 		}
 		bool isEnabled() const {
