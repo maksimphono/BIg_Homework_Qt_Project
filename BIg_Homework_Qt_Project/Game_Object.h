@@ -13,12 +13,13 @@ typedef unsigned long long ull;
 
 class Game_Event;
 
-typedef void (*EventHandler)(Game_Event&);
-
 namespace Game_Object_NS {
 	using std::string;
 	const unsigned ID_MAX_LEN = 20;
+	const string STATE_AFTER_INITIALIZATION = "mounting";
 	class Game_Object;
+	class Game_Event;
+	typedef void (*EventHandler)(Game_Event* evnt);
 
 	namespace Exceptions {
 		typedef enum { T_id_already_exist , T_bad_arguments, T_cant_create_more} Type;
@@ -69,16 +70,28 @@ namespace Game_Object_NS {
 			}
 			this->id = id;
 			Game_Object_NS::objects[this->id] = this;
-			this->state = "mounting";
+			this->state = STATE_AFTER_INITIALIZATION;
 			this->handlers = map<EventType, vector<EventHandler>>();
 		}
 		virtual ~Game_Object() {
 			objects.erase(this->id);
 		}
 	public:
-		int bind(EventType& type, EventHandler& handler) {
+		int bind(const EventType type, EventHandler handler) {
 			this->handlers[type].push_back(handler);
 			return this->handlers[type].size();
+		}
+		void fireSeries(const EventType type, Game_Event* evnt) {
+			auto handlers = this->handlers[type];
+			for (const auto& handler : handlers) {
+				handler(evnt);
+			}
+		}
+		void fireSingle(const EventType type, int index, Game_Event* evnt) {
+			auto handlers = this->handlers[type];
+			if (index <= handlers.size()) {
+				handlers[index](evnt);
+			}
 		}
 	};
 
