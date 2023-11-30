@@ -60,7 +60,7 @@ namespace Game_Object_NS {
 	private:
 		
 		map<EventType, vector<EventHandler>> handlers;
-	public:
+	public: // basic data:
 		string id;
 		string state;
 		
@@ -76,10 +76,10 @@ namespace Game_Object_NS {
 		virtual ~Game_Object() {
 			objects.erase(this->id);
 		}
-	public:
+	public: // event methods:
 		int bind(const EventType type, EventHandler handler) {
 			this->handlers[type].push_back(handler);
-			return this->handlers[type].size();
+			return this->handlers[type].size() - 1;
 		}
 		void fireSeries(const EventType type, Game_Event* evnt) {
 			auto handlers = this->handlers[type];
@@ -92,6 +92,30 @@ namespace Game_Object_NS {
 			if (index <= handlers.size()) {
 				handlers[index](evnt);
 			}
+		}
+		void unbind(const EventType type, int index) {
+			if (index <= this->handlers[type].size()) {
+				this->handlers[type].erase(this->handlers[type].begin() + index);
+			}
+		}
+	public: // getters:
+		string getId() const{
+			return this->id;
+		}
+		string getState() const {
+			return this->id;
+		}
+	public: // setters:
+		void getId(const string newId){
+			if (Game_Object::checkId(newId)) {
+				this->id = newId;
+			}
+			else {
+				throw Exceptions::Exception_id_already_exist;
+			}
+		}
+		void getState(string newStatus) {
+			this->state = newStatus;
 		}
 	};
 
