@@ -16,14 +16,14 @@ int main(int argc, char* argv[])
     using Game_Object_NS::EventHandler;
     Game_Object* obj = new Game_Object("qw");
     Game_Object obj2;
-    Game_Event ev(T1, obj, &obj2);
+    Game_Event* ev = new Game_Event(T1, obj, &obj2);
 
-    obj->bind(T1, (EventHandler)handle0);
-    obj->bind(T1, (EventHandler)handle1);
-    obj->fireSeries(T1, &ev);
-    obj->fire(T1, handle0, &ev);
-    //obj.unbind(T1, handle1);
+    //obj->bind(T1, (EventHandler)handle0);
+    //obj->bind(T1, (EventHandler)handle1);
+    obj->fireSeries(T1, ev);
+    obj->fire(T1, handle0, ev);
     delete obj;
+    delete ev;
 
     return 0;
 }

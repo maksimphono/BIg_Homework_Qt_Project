@@ -4,18 +4,16 @@
 #include <vector>
 #include <ctime>
 
-using std::map;
-using std::vector;
-
 typedef enum {NONE, T1} EventType;
 
 typedef unsigned long long ull;
 
 class Game_Event;
 
-
 namespace Game_Object_NS {
 	using std::string;
+	using std::map;
+	using std::vector;
 	const unsigned ID_MAX_LEN = 20;
 	const string STATE_AFTER_INITIALIZATION = "mounting";
 	class Game_Object;
@@ -41,11 +39,8 @@ namespace Game_Object_NS {
 		Exception Exception_bad_arguments(T_bad_arguments, "Error, bad arguments!\n");
 		Exception Exception_cant_create_more(T_cant_create_more, "Error, can't create more objects!\n");
 	};
-	
 
 	map<string, Game_Object*> objects;
-
-	
 
 	class Game_Object {
 	private:
@@ -91,18 +86,23 @@ namespace Game_Object_NS {
 			return this->handlers[type].size() - 1;
 		}
 		void fireSeries(const EventType type, Game_Event* evnt) {
+			if (!(*this->handlers)[type]) return;
 			auto handlers = (*this->handlers)[type];
 			for (const auto& handler : *handlers) {
 				handler(evnt);
 			}
 		}
 		void fireSingle(const EventType type, int index, Game_Event* evnt) {
+			if (!(*this->handlers)[type]) return;
+
 			auto handlers = (*this->handlers)[type];
 			if (index <= handlers->size()) {
 				(*handlers)[index](evnt);
 			}
 		}
 		void fire(const EventType type, EventHandler handler, Game_Event* evnt) {
+			if (!(*this->handlers)[type]) return;
+
 			auto handlers = (*this->handlers)[type];
 			for (const auto& my_handler : *handlers) {
 				if (handler == my_handler) {
@@ -111,11 +111,14 @@ namespace Game_Object_NS {
 			}
 		}
 		void unbind(const EventType type, int index) {
-			if (index <= this->handlers[type].size()) {
+			if (!(*this->handlers)[type]) return;
+			if (index <= (*this->handlers)[type]->size()) {
 				(*this->handlers)[type]->erase((*this->handlers)[type]->begin() + index);
 			}
 		}
 		void unbind(const EventType type, EventHandler handler) {
+			if (!(*this->handlers)[type]) return;
+
 			typedef std::vector<Game_Object_NS::EventHandler>::iterator Iterator;
 
 			auto& handlers = (*this->handlers)[type];
@@ -130,12 +133,12 @@ namespace Game_Object_NS {
 		}
 		void unbindAll() {
 			for (const auto& handlers : (*this->handlers)) {
+				if (!(handlers.second)) continue;
 				for (int i = 0; i < handlers.second->size(); i++) {
 					this->unbind(handlers.first, i);
 					i--;
 				}
 			}
-			
 		}
 	public: // getters:
 		string getId() const{
