@@ -47,6 +47,7 @@ namespace Game_Object_NS {
 	private:
 		
 		static bool checkId(string id) {
+			if (id[0] == 0) return true;
 			return objects.find(id) == objects.end();
 		}
 
@@ -68,7 +69,9 @@ namespace Game_Object_NS {
 			if (id != "" && !checkId(id)) {
 				throw Exceptions::Exception_id_already_exist;
 			}
-			this->id = new string(id);
+			if (id[0])
+				this->id = new string(id);
+			else this->id = new string();
 			Game_Object_NS::objects[*this->id] = this;
 			this->state = new string(STATE_AFTER_INITIALIZATION);
 			this->handlers = new map<EventType, vector<EventHandler>*>();
