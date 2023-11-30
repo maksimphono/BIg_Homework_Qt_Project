@@ -28,8 +28,18 @@ namespace Mine_NS {
 		
 		void emit() {
 			if (this->isEnabled()) {
-				// TODO: realize Items emitting
+				// TODO: realize items emitting system
 				return;
+			}
+		}
+
+		void tick(ull globalTick) override {
+			if (globalTick % this->frequency == 0) {
+				__super::setState("emit");
+				this->emit();
+			}
+			else {
+				__super::setState("reloading");
 			}
 		}
 

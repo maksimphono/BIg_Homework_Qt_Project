@@ -48,6 +48,7 @@ namespace Structure_NS {
 		
 		~Structure() override {
 		}
+		void tick(ull) override;
 	public: // getters:
 		int getOrientation() const {
 			return this->orientation;

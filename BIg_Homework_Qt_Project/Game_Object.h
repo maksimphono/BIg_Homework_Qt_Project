@@ -80,6 +80,9 @@ namespace Game_Object_NS {
 			delete this->id;
 			delete this->state;
 		}
+
+		virtual void tick(ull globalTick);
+
 	public: // event methods:
 		int bind(const EventType type, EventHandler handler) {
 			if ((*this->handlers)[type] == NULL) (*this->handlers)[type] = new vector<EventHandler>();
@@ -149,7 +152,7 @@ namespace Game_Object_NS {
 			return *this->id;
 		}
 	public: // setters:
-		void getId(const string newId){
+		void setId(const string newId){
 			if (Game_Object::checkId(newId)) {
 				*this->id = newId;
 			}
@@ -157,7 +160,7 @@ namespace Game_Object_NS {
 				throw Exceptions::Exception_id_already_exist;
 			}
 		}
-		void getState(string newStatus) {
+		void setState(string newStatus) {
 			*this->state = newStatus;
 		}
 	};
