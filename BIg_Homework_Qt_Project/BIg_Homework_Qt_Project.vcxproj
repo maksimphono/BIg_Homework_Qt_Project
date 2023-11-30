@@ -92,6 +92,7 @@
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="consts.h" />
     <ClInclude Include="Event.h" />
     <ClInclude Include="Game_Object.h" />
     <ClInclude Include="global_header.h" />

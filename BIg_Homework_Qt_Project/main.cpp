@@ -1,4 +1,5 @@
 #include <iostream>
+#include "consts.h"
 
 #include "Game_Object.h"
 
