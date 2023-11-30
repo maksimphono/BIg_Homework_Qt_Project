@@ -44,7 +44,7 @@ namespace Item_NS {
 			this->price = other.price;
 			this->resource = other.resource;
 		}
-		Item (string resource, string id, int speed = 0, bool cuttible = false, int price = 0)
+		Item (string resource, string id = "", int speed = 0, bool cuttible = false, int price = 0)
 			: speed(speed), cuttible(cuttible), price(price), Game_Object(id.c_str()) {
 			this->resource = new string(resource);
 			*this->resource = resource;

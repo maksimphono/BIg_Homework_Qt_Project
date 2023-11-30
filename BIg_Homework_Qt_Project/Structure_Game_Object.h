@@ -8,7 +8,7 @@ namespace Structure_NS {
 	using std::map;
 	using namespace Game_Object_NS;
 
-	typedef enum {UP, DOWN, LEFT, RIGHT} Orientation;
+	typedef enum {NONE, UP, DOWN, LEFT, RIGHT} Orientation;
 
 	namespace Exceptions {
 		using std::exception;
@@ -37,9 +37,15 @@ namespace Structure_NS {
 			this->orientation = other.orientation;
 			this->enabled = true;
 		}
-		Structure(Orientation orientation, string id)
-			: orientation(orientation), Game_Object(id.c_str()) {
-		}
+		Structure(Orientation orientation = NONE)
+			: orientation(orientation), Game_Object("") {}
+		
+		Structure(string id = "")
+			: orientation(NONE), Game_Object(id.c_str()) {}
+		
+		Structure(Orientation orientation = NONE, string id = "")
+			: orientation(orientation), Game_Object(id.c_str()) {}
+		
 		~Structure() override {
 		}
 	public: // getters:

@@ -165,13 +165,16 @@ namespace Game_Object_NS {
 	class Game_Event {
 	private:
 		EventType type;
-		ull tickstamp;
 	public:
+		ull tickstamp;
 		Game_Object* target;
 		Game_Object* object;
 		void* payload;
 	public:
-		Game_Event() : type(NONE), target(NULL), object(NULL), payload(NULL), tickstamp(0) {}
+		Game_Event() 
+			: type(NONE), target(NULL), object(NULL), payload(NULL), tickstamp(0) {}
+		Game_Event(Game_Event& another) 
+			: type(another.type), target(another.target), object(another.object), payload(another.payload), tickstamp(another.tickstamp) {}
 		Game_Event(const EventType type, Game_Object* target = NULL, Game_Object* object = NULL, void* payload = NULL, ull tickstamp = 0)
 			: type(type), target(target), object(object), payload(payload), tickstamp(tickstamp) {}
 		virtual ~Game_Event() {
