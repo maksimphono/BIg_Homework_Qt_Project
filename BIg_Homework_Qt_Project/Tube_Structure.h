@@ -42,6 +42,7 @@ namespace Tube_NS {
 		void tick(ull globalTick) const override {
 			if (globalTick % floating_item->getSpeed() == 0) {
 				if (steps_passed == STEPS_TO_PASS / 2 && this->next && this->next->floating_item == NULL) {
+					// TODO: realize how and when one block should pass item to the next
 					this->next->floating_item = this->floating_item;
 				}
 				else if (steps_passed > STEPS_TO_PASS / 2) {
