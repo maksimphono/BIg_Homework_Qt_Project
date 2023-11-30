@@ -62,5 +62,8 @@
     <ClInclude Include="global_header.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Structure_Game_Object.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
