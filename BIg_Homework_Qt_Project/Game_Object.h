@@ -1,3 +1,4 @@
+#pragma once
 #define GAME_OBJECT_H 0
 
 #include <map>
