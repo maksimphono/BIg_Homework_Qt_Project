@@ -95,6 +95,7 @@
     <ClInclude Include="consts.h" />
     <ClInclude Include="Event.h" />
     <ClInclude Include="Game_Object.h" />
+    <ClInclude Include="Game_State.h" />
     <ClInclude Include="global_header.h" />
     <ClInclude Include="Item_Game_Object.h" />
     <ClInclude Include="Mine_Structure.h" />

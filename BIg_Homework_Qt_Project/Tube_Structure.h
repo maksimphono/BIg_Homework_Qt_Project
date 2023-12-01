@@ -7,6 +7,7 @@ namespace Tube_NS {
 	using std::vector;
 	using std::string;
 	using std::map;
+	using std::stringstream;
 	using Structure_NS::Structure;
 	using Structure_NS::Orientation;
 	using Item_NS::Item;
@@ -65,6 +66,16 @@ namespace Tube_NS {
 			}
 			return this;
 		}
+
+		stringstream* repr(std::ofstream& stream) const override {
+			stringstream* report = new stringstream();
+			*report << "\Tube object id = " << this->getId() << ", " << this << ";\n";
+			*report << "\n\n";
+
+			stream << report->str();
+			return report;
+		}
+
 	public: // getters:
 
 	};

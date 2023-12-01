@@ -1,7 +1,10 @@
 ﻿#include <iostream>
 #include "consts.h"
 
-#include "Game_Object.h"
+#include "Game_State.h"
+#include "Item_Game_Object.h"
+#include "Mine_Structure.h"
+#include "Tube_Structure.h"
 
 void handle0(Game_Object_NS::Game_Event* evnt) {
     *evnt->target->state = "asdfg";
@@ -9,11 +12,6 @@ void handle0(Game_Object_NS::Game_Event* evnt) {
 void handle1(Game_Object_NS::Game_Event* evnt) {
     *evnt->object->state = "zxcvb";
 }
-#include "Item_Game_Object.h"
-#include "Mine_Structure.h"
-#include "Tube_Structure.h"
-
-#include <fstream>
 class Logger {
 public:
     const wchar_t* filepath = L"D:/Maksim/学习/2023秋/高级程序/Big hw/log.txt";
