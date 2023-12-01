@@ -11,9 +11,9 @@ namespace Game_State_NS {
 	using std::stringstream;
 
 	class GameState {
-	private:
+	public:
 		int balance;
-		map<string, int> sold_items;
+		map<string, double> sold_items;
 	public:
 		GameState() :balance(0) {}
 		~GameState() {}
@@ -26,10 +26,12 @@ namespace Game_State_NS {
 			for (const auto& item : this->sold_items) {
 				*report << "\t\t\t" << item.first << " : " << item.second << ";\n";
 			}
-			*report << "\n\n";
+			*report << "\n\n\n";
 
 			stream << report->str();
 			return report;
 		}
 	};
+
+	GameState mainGameState;
 }

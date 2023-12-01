@@ -117,6 +117,9 @@ namespace Item_NS {
 		string getResource() const {
 			return *this->resource;
 		}
+		Cut_state getCutState() {
+			return this->cut_state;
+		}
 	public: // setters:
 		void setSpeed(int speed) {
 			this->speed = speed;

@@ -5,6 +5,7 @@
 #include "Item_Game_Object.h"
 #include "Mine_Structure.h"
 #include "Tube_Structure.h"
+#include "Factory_Structure.h"
 
 void handle0(Game_Object_NS::Game_Event* evnt) {
     *evnt->target->state = "asdfg";
@@ -26,6 +27,9 @@ public:
         delete this->file;
     }
     void reprAll() {
+        *this->file << "\n Game state:\n";
+        Game_State_NS::mainGameState.repr(*this->file);
+        *this->file << "\n Objects:\n";
         for (const auto& obj : Game_Object_NS::objects_list) {
             if (obj)
                 obj->repr(*this->file);
@@ -47,9 +51,15 @@ int main(int argc, char* argv[])
     using Item_NS::Item;
     using Tube_NS::TubeBlock;
     using Structure_NS::Orientation;
+    using Factory_NS::Factory;
+
+    Factory* mainFactory = new Factory("Main factory");
     Mine* mine = new Mine(3, "Coal", "qw");
     Item* item = new Item("Coal", "", 1, true, 4);
     std::pair<Item*, Item*> p = item->cut();
+    
+    mainFactory->receiveItem(p.first);
+    mainFactory->receiveItem(p.second);
     repr();
 
     TubeBlock* t1 = new TubeBlock(NULL, NULL, Orientation::LEFT, "1");

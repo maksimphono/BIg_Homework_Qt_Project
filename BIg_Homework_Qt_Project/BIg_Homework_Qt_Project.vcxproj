@@ -94,6 +94,7 @@
   <ItemGroup>
     <ClInclude Include="consts.h" />
     <ClInclude Include="Event.h" />
+    <ClInclude Include="Factory_Structure.h" />
     <ClInclude Include="Game_Object.h" />
     <ClInclude Include="Game_State.h" />
     <ClInclude Include="global_header.h" />
