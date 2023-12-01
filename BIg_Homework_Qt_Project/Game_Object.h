@@ -4,6 +4,9 @@
 #include <map>
 #include <vector>
 #include <ctime>
+#include <fstream>
+#include <sstream>
+#include <list>
 
 typedef enum {NONE, T1} EventType;
 
@@ -13,6 +16,7 @@ class Game_Event;
 
 namespace Game_Object_NS {
 	using std::string;
+	using std::stringstream;
 	using std::map;
 	using std::vector;
 	const unsigned ID_MAX_LEN = 20;
@@ -42,6 +46,8 @@ namespace Game_Object_NS {
 	};
 
 	map<string, Game_Object*> objects;
+	std::vector<Game_Object*> objects_vector;
+	std::list<Game_Object*> objects_list;
 
 	class Game_Object {
 	private:
@@ -73,18 +79,41 @@ namespace Game_Object_NS {
 				this->id = new string(id);
 			else this->id = new string();
 			Game_Object_NS::objects[*this->id] = this;
+			//Game_Object_NS::objects_vector.push_back(this);
+			Game_Object_NS::objects_list.push_back(this);
 			this->state = new string(STATE_AFTER_INITIALIZATION);
 			this->handlers = new map<EventType, vector<EventHandler>*>();
 		}
 		virtual ~Game_Object() {
 			objects.erase(*this->id);
+
+			for (auto obj = objects_list.begin(); obj != objects_list.end(); obj++) {
+				if (*obj == this) {
+					objects_list.erase(obj);
+					break;
+				}
+			}
+			
 			this->unbindAll();
 			delete this->handlers;
 			delete this->id;
 			delete this->state;
+			
 		}
 
 		virtual void tick(ull globalTick) const {}
+
+		virtual stringstream* repr(std::ofstream& stream) const {
+			stringstream* report = new stringstream();
+			*report << "\tGame_Object id = " << this->id << ";\n" <<
+				"\t\tCurrent state: " << this->state << ";\n" <<
+				"\t\t" << this->handlers->size() << " event types associated\n";
+			
+			if (stream.is_open()) {
+				stream << report->str();
+			}
+			return report;
+		}
 
 	public: // event methods:
 		int bind(const EventType type, EventHandler handler) {

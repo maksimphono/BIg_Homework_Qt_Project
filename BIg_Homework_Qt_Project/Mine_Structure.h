@@ -8,18 +8,18 @@ namespace Mine_NS {
 	using std::map;
 	using Structure_NS::Structure;
 	using Structure_NS::Orientation;
-	using Item_NS::Item;
+	using Item_NS::Raw_Item;
 
 	class Mine : Structure {
 	private:
 		int frequency;
-		Item* item_sample;
+		Raw_Item* item_sample;
 		
 	public:
 		Mine(int frequency, string resource, string id = "")
-			: frequency(frequency), item_sample(new Item(resource, "", 1)), Structure(id) {}
+			: frequency(frequency), item_sample(new Raw_Item({resource, "", 1, false, 0})), Structure(id) {}
 
-		Mine(int frequency, Item* sample, string id = "")
+		Mine(int frequency, Raw_Item* sample, string id = "")
 			: frequency(frequency), item_sample(sample), Structure(id) {}
 
 		~Mine() override {
@@ -44,18 +44,18 @@ namespace Mine_NS {
 		int getFriquency() const {
 			return this->frequency;
 		}
-		Item* getItem() const {
+		Raw_Item* getItem() const {
 			return this->item_sample;
 		}
 	public: // setters:
 		void setFriquency(int newFrequency){
 			this->frequency = newFrequency;
 		}
-		void setItem(Item& newSample){
+		void setItem(Raw_Item& newSample){
 			this->item_sample = &newSample;
 		}
 		void setItem(string resource) {
-			this->item_sample = new Item(resource);
+			this->item_sample = new Raw_Item({ resource, "", 0, 0, 0 });
 		}
 	};
 }

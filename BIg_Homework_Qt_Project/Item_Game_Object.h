@@ -35,6 +35,14 @@ namespace Item_NS {
 		};
 
 	}
+
+	typedef struct {
+		string resource;
+		string id;
+		int speed;
+		bool cuttible;
+		int price;
+	} Raw_Item;
 	
 	class Item : Game_Object{
 	private:
@@ -76,6 +84,26 @@ namespace Item_NS {
 			// TODO : implement movement system
 			return;
 		}
+
+		stringstream* repr(std::ofstream& stream) const override {
+			stringstream* report = new stringstream();
+			*report << "\tItem object id = " << this->getId() << ", " << this << ";\n" <<
+				"\t\tSpeed = " << this->speed << ";\n" <<
+				"\t\tPrice = " << this->price << ";\n" <<
+				"\t\tCarried resource = " << *this->resource << ";\n" <<
+				"\t\tIs cuttable = " << this->cuttible << ";\n";
+			if (!this->cuttible && this->cut_state != FULL) {
+				if (this->cut_state == LEFT)
+					*report << "\t\tLeft half;";
+				else 
+					*report << "\t\tRight half;";
+			}
+			*report << "\n\n";
+
+			stream << report->str();
+			return report;
+		}
+
 	public: // getters:
 		int getSpeed() const {
 			return this->speed;
